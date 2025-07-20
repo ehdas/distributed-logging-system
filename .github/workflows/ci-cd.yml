@@ -76,4 +76,4 @@ jobs:
           go test ./...
 
       - name: Docker Compose up
-        run: docker-compose up -d --build
+        run: docker compose up -d --build
