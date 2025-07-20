@@ -48,14 +48,32 @@ jobs:
         with:
           go-version: 1.21
 
-      - name: Build services
-        run: |
-          cd log_collector && go build -v .
-          cd ../log_processor && go build -v .
-          cd ../log_dashboard && go build -v .
+      - name: Build log_collector
+        run: cd log_collector && go build -v .
 
-      - name: Run tests
-        run: go test ./...
+      - name: Build log_processor
+        run: cd log_processor && go build -v .
+
+      - name: Build log_dashboard
+        run: cd log_dashboard && go build -v .
+
+      - name: Run log_collector tests
+        working-directory: ./log_collector
+        run: |
+          go mod tidy
+          go test ./...
+
+      - name: Run log_processor tests
+        working-directory: ./log_processor
+        run: |
+          go mod tidy
+          go test ./...
+
+      - name: Run log_dashboard tests
+        working-directory: ./log_dashboard
+        run: |
+          go mod tidy
+          go test ./...
 
       - name: Docker Compose up
         run: docker-compose up -d --build
